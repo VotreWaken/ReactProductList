@@ -1,0 +1,78 @@
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.todo-list {
+  width: 500px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.task-item button {
+  margin-left: auto;
+}
+
+.task-done {
+  text-decoration: line-through;
+}
+
+.active {
+  background: dodgerblue;
+  color: #fff;
+  border-radius: 20px;
+}
+.todo__input {
+  height: 40px;
+  border: none;
+  text-align: center;
+  border-radius: 20px;
+}
+
+
+.input-container {
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input__createbtn, .post__button {
+  border: none;
+  background: transparent;
+}
+
+
+.todo__input__createbtn, .image-preview, .todo__image__decline, .TasksFilterImage {
+  width: 40px;
+}
+
+
+.Tasks-Filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+}
+.TodoTasksList {
+  background: white;
+}
+
+.Tasks-FilterBtn {
+  display: flex;
+  gap: 10px;
+}
+
+.Tasks-FilterBtn button {
+  border: none;
+  width: 50px;
+}
+
+.Tasks-FilterBtn button:hover {
+  color: rgb(18, 70, 122);
+}
