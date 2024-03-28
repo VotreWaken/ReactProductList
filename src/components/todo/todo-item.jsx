@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React, { useState } from "react";
 import imageDecline from '../../assets/Decline.svg';
-const TodoItem = ({ title, done, id, removeTask, toggleDone, updateTask }) => {
+const TodoItem = ({ title, done, id, removeTask, toggleDone, updateTask, ...post }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 
@@ -42,7 +42,8 @@ const TodoItem = ({ title, done, id, removeTask, toggleDone, updateTask }) => {
         defaultChecked={done}
         onClick={() => toggleDone(id)}
       />
-
+      <h3>{post.brand} {post.model} </h3>
+      
       {isEdit ? editTemplate : normalTemplate}
 
       <button className="post__button" onClick={() => removeTask(id)}>

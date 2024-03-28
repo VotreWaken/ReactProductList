@@ -8,14 +8,30 @@ import { nanoid } from "nanoid";
 import { useEffect } from "react";
 import { TodoReducer } from "./todo-reducer";
 
+// Old Code 
+import { useDispatch, useSelector } from 'react-redux';
+import axios from '../../axios';
+import { fetchPosts } from '../../redux/slices/posts';
+
 const TodoList = () => {
+
+  const dispatchs = useDispatch();
+  const { posts } = useSelector(state => state.posts);
+
+  const isPostsLoading = posts.status === 'loading';
+
+  React.useEffect(() => {
+      dispatchs(fetchPosts())
+  }, []);
+
+
   const [tasks2, dispatch] = useReducer(TodoReducer, []);
   console.log(tasks2);
 
 
 
   const [tasks, setTasks] = useState([]);
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("All"); // По умолчанию показывать все задачи
 
   useEffect(() => {
     setTasks(JSON.parse(localStorage.getItem("tasks")) || list);
@@ -47,6 +63,14 @@ const TodoList = () => {
     ]);
   };
 
+  // Извлечь все значения моделей автомобилей из постов
+  const carModels = posts.items.map(post => post.brand).filter(Boolean);
+  
+  // Найти уникальные значения моделей автомобилей
+  const uniqueCarModels = [...new Set(carModels)];
+
+  const filteredPosts = filter === "All" ? posts.items : posts.items.filter(post => post.brand === filter);
+
   const removeTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
@@ -72,6 +96,8 @@ const TodoList = () => {
     setTasks(newTasks);
   };
 
+
+
   return (
     <div className="container">
       <h1 >TODO LIST</h1>
@@ -81,18 +107,18 @@ const TodoList = () => {
 
         <TodoFilter
           setFilter={setFilter}
-          filterMap={filterMap}
           activeFilter={filter}
+          carModels={uniqueCarModels}
         />
 
         <div className="TodoTasksList">
-          {tasks.filter(filterMap[filter]).map((task) => (
+        {(isPostsLoading ? [...Array(5)] : filteredPosts).map((post, index) => (
             <TodoItem
-              {...task}
+              {...post}
               removeTask={removeTask}
               toggleDone={toggleDone}
               updateTask={updateTask}
-              key={task.id}
+
             />
           ))}
         </div>
