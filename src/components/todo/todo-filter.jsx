@@ -1,20 +1,21 @@
 import classNames from "classnames";
 import React, { useState } from 'react';
 import TasksFilterImage from '../../assets/TasksList.svg';
+import CarSearch from "./todo-search";
 
 const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
 
-  const [searchTerm, setSearchTerm] = useState(""); // Состояние для хранения строки поиска
+  const [searchTerm, setSearchTerm] = useState(""); // Состояние для строки поиска
+
+  // Обработчик изменения строки поиска
+  const handleCarSearch = (searchTerm) => {
+    setSearchTerm(searchTerm); // Устанавливаем текущее значение строки поиска
+    setFilter({ ...activeFilter, searchTerm: searchTerm.toLowerCase() }); // Применяем строку поиска к фильтру
+  };
 
   const handlePriceChange = (event) => {
     const newPriceRange = { ...activeFilter.priceRange, min: parseInt(event.target.value) };
     setFilter({ ...activeFilter, priceRange: newPriceRange });
-  };
-
-  const handleSearchChange = (event) => {
-    const term = event.target.value;
-    setSearchTerm(term);
-    setFilter({ ...activeFilter, searchTerm: term }); // Установка строки поиска в фильтр
   };
 
   return (
@@ -32,24 +33,17 @@ const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
         ))}
       </div>
       <div className="FilterByPrice">
-      <span>$0 - ${activeFilter.priceRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+      <span>${activeFilter.priceRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} - $800000</span>
         <input
           type="range"
           name="min"
           min="0"
-          max="3000000"
+          max="800000"
           value={activeFilter.priceRange.min}
           onChange={handlePriceChange}
         />
     </div>
-    <div className="SearchInput">
-        <input
-          type="text"
-          placeholder="Search by name"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-      </div>
+    <CarSearch onSearch={handleCarSearch} /> {/* Передаем обработчик поиска */}
     </div>
   );
 };

@@ -31,7 +31,7 @@ const TodoList = () => {
 
 
   const [tasks, setTasks] = useState([]);
-  const [filter, setFilter] = useState({ brand: "All", priceRange: { min: 0, max: 3000000 }, searchTerm: "" });
+  const [filter, setFilter] = useState({ brand: "All", priceRange: { min: 0, max: 800000 }, searchTerm: "" });
 
   useEffect(() => {
     setTasks(JSON.parse(localStorage.getItem("tasks")) || list);
@@ -69,11 +69,12 @@ const TodoList = () => {
   // Найти уникальные значения моделей автомобилей
   const uniqueCarModels = [...new Set(carModels)];
 
-  const filteredPosts = posts.items.filter(post => {
+  const filteredPosts = posts.items ? posts.items.filter(post => {
     const brandFilter = filter.brand === "All" || post.brand === filter.brand;
     const priceFilter = post.price >= filter.priceRange.min && post.price <= filter.priceRange.max;
-    return brandFilter && priceFilter;
-  });
+    const searchFilter = post.model && post.model.toLowerCase().includes(filter.searchTerm.toLowerCase());
+    return brandFilter && priceFilter && searchFilter;
+  }) : [];
 
   const removeTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
