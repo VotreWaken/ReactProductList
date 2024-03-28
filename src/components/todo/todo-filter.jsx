@@ -4,10 +4,17 @@ import TasksFilterImage from '../../assets/TasksList.svg';
 
 const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
 
-  const [minPrice, setMinPrice] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(""); // Состояние для хранения строки поиска
 
   const handlePriceChange = (event) => {
-    setMinPrice(event.target.value);
+    const newPriceRange = { ...activeFilter.priceRange, min: parseInt(event.target.value) };
+    setFilter({ ...activeFilter, priceRange: newPriceRange });
+  };
+
+  const handleSearchChange = (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+    setFilter({ ...activeFilter, searchTerm: term }); // Установка строки поиска в фильтр
   };
 
   return (
@@ -16,26 +23,33 @@ const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
       <div className="Tasks-FilterBtn">
         {carModels.map((carModel) => (
           <button
-            key={carModel}
-            onClick={() => setFilter(carModel)}
-            className={classNames({ active: carModel === activeFilter })}
-          >
+          key={carModel}
+          onClick={() => setFilter({ ...activeFilter, brand: carModel })}
+          className={classNames({ active: carModel === activeFilter.brand })}
+        >
             {carModel}
           </button>
         ))}
       </div>
       <div className="FilterByPrice">
-      <span>$0 - ${minPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
-      <input
-        type="range"
-        name="min"
-        min="0"
-        max="3000000"
-        value={minPrice}
-        onChange={handlePriceChange}
-      />
+      <span>$0 - ${activeFilter.priceRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+        <input
+          type="range"
+          name="min"
+          min="0"
+          max="3000000"
+          value={activeFilter.priceRange.min}
+          onChange={handlePriceChange}
+        />
     </div>
-
+    <div className="SearchInput">
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </div>
     </div>
   );
 };
