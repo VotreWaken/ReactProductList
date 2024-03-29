@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import TasksFilterImage from '../../assets/TasksList.svg';
 import CarSearch from "./todo-search";
 
-const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
+const TodoFilter = ({ setFilter, activeFilter, carModels, carYears  }) => {
 
   const [searchTerm, setSearchTerm] = useState(""); // Состояние для строки поиска
 
@@ -18,19 +18,34 @@ const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
     setFilter({ ...activeFilter, priceRange: newPriceRange });
   };
 
+  const handleBrandChange = (event) => {
+    setFilter({ ...activeFilter, brand: event.target.value });
+  };
+
+  const initialYears = activeFilter.years || [];
+  const [years, setYears] = useState(initialYears); // Используем установленное значение
+
+  const handleYearChange = (event, year) => {
+    const isChecked = event.target.checked;
+    const newYears = isChecked
+      ? [...years, year]
+      : years.filter(y => y !== year);
+    setYears(newYears);
+    setFilter({ ...activeFilter, years: newYears });
+  };
+
   return (
     <div className="Tasks-Filter">
       <img className="TasksFilterImage" src={TasksFilterImage} alt="" />
       <div className="Tasks-FilterBtn">
-        {carModels.map((carModel) => (
-          <button
-          key={carModel}
-          onClick={() => setFilter({ ...activeFilter, brand: carModel })}
-          className={classNames({ active: carModel === activeFilter.brand })}
+      <select
+          value={activeFilter.brand}
+          onChange={handleBrandChange}
         >
-            {carModel}
-          </button>
-        ))}
+          {carModels.map((carModel) => (
+            <option key={carModel} value={carModel}>{carModel}</option>
+          ))}
+        </select>
       </div>
       <div className="FilterByPrice">
       <span>${activeFilter.priceRange.min.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} - $800000</span>
@@ -44,6 +59,21 @@ const TodoFilter = ({ setFilter, activeFilter, carModels }) => {
         />
     </div>
     <CarSearch onSearch={handleCarSearch} /> {/* Передаем обработчик поиска */}
+
+    <div className="FilterByYear">
+        {carYears.map(year => (
+          <div key={year} className="LeftSideItemCheckBox">
+            <input
+      type="checkbox"
+      value={year}
+      checked={years.includes(year)}
+      onChange={(event) => handleYearChange(event, year)}
+            />
+            <p>{year}</p>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 };

@@ -69,11 +69,18 @@ const TodoList = () => {
   // Найти уникальные значения моделей автомобилей
   const uniqueCarModels = [...new Set(carModels)];
 
+   // Извлечь все значения годов выпуска автомобилей из постов
+   const carYears = posts.items.map(post => post.year).filter(year => year);
+
+   // Найти уникальные значения годов выпуска автомобилей
+   const uniqueCarYears = [...new Set(carYears)];
+
   const filteredPosts = posts.items ? posts.items.filter(post => {
     const brandFilter = filter.brand === "All" || post.brand === filter.brand;
     const priceFilter = post.price >= filter.priceRange.min && post.price <= filter.priceRange.max;
     const searchFilter = post.model && post.model.toLowerCase().includes(filter.searchTerm.toLowerCase());
-    return brandFilter && priceFilter && searchFilter;
+    const yearFilter = filter.years.length === 0 || filter.years.includes(post.year); // Добавляем фильтр по году
+    return brandFilter && priceFilter && searchFilter && yearFilter;
   }) : [];
 
   const removeTask = (id) => {
@@ -114,6 +121,7 @@ const TodoList = () => {
           setFilter={setFilter}
           activeFilter={filter}
           carModels={uniqueCarModels}
+          carYears={uniqueCarYears}
         />
 
         <div className="TodoTasksList">
