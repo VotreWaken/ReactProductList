@@ -26,12 +26,12 @@ const TodoFilter = ({ setFilter, activeFilter, carModels, carYears  }) => {
   const [years, setYears] = useState(initialYears); // Используем установленное значение
 
   const handleYearChange = (event, year) => {
-    const isChecked = event.target.checked;
+    const isChecked = event.target.checked; // Проверяем, был ли чекбокс отмечен
     const newYears = isChecked
-      ? [...years, year]
-      : years.filter(y => y !== year);
-    setYears(newYears);
-    setFilter({ ...activeFilter, years: newYears });
+      ? [...years, year] // Если отмечен, добавляем год в список фильтрации
+      : years.filter(y => y !== year); // Если не отмечен, удаляем год из списка фильтрации
+    setYears(newYears); // Обновляем состояние списка годов
+    setFilter({ ...activeFilter, years: newYears }); // Применяем обновленный список годов к фильтру
   };
 
   return (

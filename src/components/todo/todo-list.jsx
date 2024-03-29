@@ -79,7 +79,7 @@ const TodoList = () => {
     const brandFilter = filter.brand === "All" || post.brand === filter.brand;
     const priceFilter = post.price >= filter.priceRange.min && post.price <= filter.priceRange.max;
     const searchFilter = post.model && post.model.toLowerCase().includes(filter.searchTerm.toLowerCase());
-    const yearFilter = filter.years.length === 0 || filter.years.includes(post.year); // Добавляем фильтр по году
+    const yearFilter = !filter.years || filter.years.length === 0 || filter.years.includes(post.year);
     return brandFilter && priceFilter && searchFilter && yearFilter;
   }) : [];
 
